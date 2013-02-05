@@ -1,5 +1,9 @@
 <?php
 
+
+// Route::controller(Controller::detect());
+Route::get('/', 'main@index');
+Route::get('nyt', 'main@nyt');
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -31,11 +35,6 @@
 |		});
 |
 */
-
-Route::get('/', function()
-{
-	return View::make('home.index');
-});
 
 /*
 |--------------------------------------------------------------------------
