@@ -1,9 +1,10 @@
 <?php
 
 
-// Route::controller(Controller::detect());
+Route::controller(Controller::detect());
 Route::get('/', 'main@index');
 Route::get('nyt', 'main@nyt');
+Route::get('nyt_sections', 'main@nyt_sections');
 /*
 |--------------------------------------------------------------------------
 | Application Routes
