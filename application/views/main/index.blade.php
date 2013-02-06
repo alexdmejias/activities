@@ -5,14 +5,8 @@
 	<title></title>
 </head>
 <body>
-  <!-- <form method="GET" action="request.php"> -->
-    {{Form::open('user/profile', 'PUT');}}
-    <select name="resource" id="resource">
-      <option value="mostemailed">most emailed</option>
-      <option value="mostviewed">most viewed</option>
-      <option value="mostshared">most shared</option>
-    </select>
-
+    {{Form::open('main/nyt', 'GET');}}
+    {{Form::select('resource', array('mostemailed' => 'most emailed', 'mostviewed' => 'most viewed', 'mostshared' => 'most shared') ) }}
     <select name="section" id="section">
       <option value="all-sections">All Sections</option>
       <option value="Arts">Arts</option>
@@ -24,22 +18,47 @@
       <option value="Business Day">Business Day</option>
     </select>
   </form>
-
   <div id="content"></div>
 
-
-  <script type="text/x-handlebars-template" id="template">
-    {{#each this}}
-      <p>title: <a href="{{url}}">{{title}}</a></p>
-      <p>byline: {{byline}}</p>
-      <p>section: {{section}}</p>
-      <p>==========</p>
-      {{/each}}
-  </script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  @include('partials/handlebar-templates/item')
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
   <script src="https://raw.github.com/wycats/handlebars.js/1.0.rc.2/dist/handlebars.js"></script>
-  <script src="app.js"></script>
 
+
+<script>
+  (function() {
+(function(){
+var template = Handlebars.compile($('#template').html());
+
+
+
+$('#resource, #section').on('load change', function(){
+  $('#content').empty();
+  $.ajax({
+    url: "{{ URL::to_action('main@nyt');}}",
+    type: 'GET',
+    dataType: 'json',
+    data: {resource: $('#resource').val(), section : $('#section').val() },
+    success: function(data, textStatus, xhr) {
+      console.log(data);
+      $('#content').html("total results: " + data.num_results + template(data.results));
+    },
+    error: function() {
+      $('#content').html("There was an error");
+    },
+    ajaxStart: function(){
+      $('#content').html('loading...');
+      console.log('starting');
+    },
+    ajaxStop: function(){
+      console.log('stopped');
+    }
+  });
+
+})
+})();
+  }())
+</script>
 </body>
 
 </html>

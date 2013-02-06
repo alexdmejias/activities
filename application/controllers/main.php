@@ -18,7 +18,7 @@ class Main_Controller extends Base_Controller {
         $output = curl_exec($ch);
         curl_close($ch);
 
-		return View::make('main.nyt', array('output' => $output));
+		return Response::make($output, 200);
 	}
 
 }
